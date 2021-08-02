@@ -2,7 +2,7 @@
   "use strict";
 
   $.fn.accordionUi = function (options) {
-    var settings = $.extend(true, {}, $.fn.accordionUi.defaults, options);
+    var settings = $.extend({}, $.fn.accordionUi.defaults, options || {});
     var self = this;
 
     return self.each(function () {
@@ -10,6 +10,7 @@
         $trigger = $selector.find('.' + settings.triggerClass),
         $panel = $selector.find('.' + settings.panelClass),
         $heading = $selector.find('.' + settings.headingClass),
+        activate = settings.activeClass,
         labelledby = $trigger.attr('id');
 
       var create = function () {
@@ -34,11 +35,13 @@
             $this.attr({
               'role': 'button',
               'href': '#' + $this.attr('aria-controls'),
+              'aria-controls': $panel.attr('id'),
               'aria-expanded': false
             });
           } else if ($this.is('button')) {
             $this.attr({
-              'aria-expanded': false
+              'aria-expanded': false,
+              'aria-controls': $panel.attr('id')
             });
           }
         });
@@ -49,8 +52,8 @@
         });
 
         // 기본으로 펼쳐져있는 것 체크
-        if ($selector.find('.' + settings.activeClass).length && $($selector.find('.' + settings.activeClass).attr('href')).css('display') === 'block') {
-          $selector.find('.' + settings.activeClass).attr('aria-expanded', true);
+        if ($selector.find('.' + activate).length && $($selector.find('.' + activate).attr('href')).css('display') === 'block') {
+          $selector.find('.' + activate).attr('aria-expanded', true);
         }
 
         eventAction();
@@ -61,12 +64,12 @@
           var _this = $(this),
             _target = '#' + _this.attr('aria-controls');
 
-          if (!_this.hasClass(settings.activeClass) && $(_target).css('display') === 'none') {
+          if (!_this.hasClass(activate) && $(_target).css('display') === 'none') {
             // 닫기
-            $trigger.removeClass(settings.activeClass).attr('aria-expanded', false);
+            $trigger.removeClass(activate).attr('aria-expanded', false);
             $panel.css('display', 'none');
             // 열기
-            _this.addClass(settings.activeClass).attr('aria-expanded', true);
+            _this.addClass(activate).attr('aria-expanded', true);
             $(_target).css('display', 'block');
 
             // 화면 이동
@@ -76,7 +79,7 @@
               }, 800);
             }
           } else {
-            _this.removeClass(settings.activeClass).attr('aria-expanded', false);
+            _this.removeClass(activate).attr('aria-expanded', false);
             $(_target).css('display', 'none');
           }
 
@@ -93,10 +96,14 @@
   };
 
   $.fn.accordionUi.defaults = {
+    animate:{},
     triggerClass: 'accordion-trigger',
     panelClass: 'accordion-panel',
     headingClass: 'accordion-heading',
     activeClass: 'is-current',
-    viewMoving: false
+    collapsible: false,
+    viewMoving: false,
+    // Callbacks
+    activate: null
   };
 })(window, document, jQuery);
