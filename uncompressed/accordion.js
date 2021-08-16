@@ -1,5 +1,27 @@
 ;(function (window, document, $){
   "use strict";
+  var uniqueId = $.fn.extend({
+    uniqueId: (function(){
+      var uuid = 0;
+      
+      return function() {
+        return this.each(function(){
+          if ( !this.id ) {
+            this.id = "ui-id-" + ( ++uuid);
+          }
+        });
+      };
+      
+    })(),
+    
+    removeUniqueId: function(){
+      return this.each(function(){
+        if ( /^ui-id-\d+$/.test( this.id ) ) {
+          $( this ).removeAttr( "id" );
+        }
+      });
+    }
+  });
 
   $.fn.accordionUi = function (options) {
     var settings = $.extend({}, $.fn.accordionUi.defaults, options || {});
@@ -13,33 +35,12 @@
         activeClass = settings.activeClass,
         labelledby = $trigger.attr('id');
 
-      var uniqueId = $.fn.extend({
-        uniqueId: (function(){
-          var uuid = 0;
-
-          return function() {
-            return this.each(function(){
-              if ( !this.id ) {
-                this.id = "ui-id-" + ( ++uuid);
-              }
-            });
-          };
-
-        })(),
-
-        removeUniqueId: function(){
-          return this.each(function(){
-            if ( /^ui-id-\d+$/.test( this.id ) ) {
-              $( this ).removeAttr( "id" );
-            }
-          });
-        }
-      });
+      
 
 
       var create = function () {
         $selector.attr('role', 'presentation');
-        var controls = $panel.attr('id');
+        var controls = ($panel.attr('id') !== undefined) ? $panel.attr('id') : $panel.uniqueId().attr('id');
         // heading 태그 체크
         if ($selector.is('div')) {
           $selector.find('h3').attr({

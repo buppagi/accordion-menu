@@ -52,7 +52,6 @@ task('scripts', (done) => {
     }))
     .pipe(sourcemaps.write('./maps/js'))
     .pipe(dest(options.paths.minified))
-    .pipe(bs.reload({ stream: true }));
   done();
 });
 task('watch-changes', (done) => {
