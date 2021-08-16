@@ -39,8 +39,8 @@ const plumberOption = {
   errorHandler: onError
 };
 
-task('scripts', function (done) {
-  return src('./uncompressed/*.js')
+task('scripts', (done) => {
+  return src(options.paths.uncompressed)
     .pipe(plumber(plumberOption))
     .pipe(sourcemaps.init({ loadMaps: true, debug: true }))
     .pipe(jshint())
@@ -51,12 +51,12 @@ task('scripts', function (done) {
       suffix: ".min"
     }))
     .pipe(sourcemaps.write('./maps/js'))
-    .pipe(gulp.dest('./minified'))
+    .pipe(dest(options.paths.minified))
     .pipe(bs.reload({ stream: true }));
   done();
 });
 task('watch-changes', (done) => {
-    watch(options.paths.src.js + '/**/*.js', series('scripts', previewReload));
+    watch(options.paths.uncompressed + '/**/*.js', series('scripts', previewReload));
     done();
 });
 

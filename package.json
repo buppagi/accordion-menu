@@ -1,6 +1,6 @@
 {
   "name": "jquery-accordion-menu",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": ">  jQuery plugin Accordion Menu",
   "main": "main.html",
   "repository": {
@@ -15,12 +15,8 @@
   "options": {
     "paths": {
       "root": "./",
-      "src": {
-        "js": "./minified"
-      },
-      "dist": {
-        "js": "./uncompressed"
-      }
+      "uncompressed": "./uncompressed",
+      "minified": "./minified"
     }
   },
   "devDependencies": {
