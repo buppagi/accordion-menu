@@ -38,7 +38,7 @@
       
 
 
-      var create = function () {
+      var _create = function () {
         $selector.attr('role', 'presentation');
         var controls = ($panel.attr('id') !== undefined) ? $panel.attr('id') : $panel.uniqueId().attr('id');
         // heading 태그 체크
@@ -126,7 +126,7 @@
       };
 
       var init = function () {
-        create();
+        _create();
       };
 
       init();
